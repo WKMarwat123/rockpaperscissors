@@ -1,0 +1,21 @@
+.container {
+    margin-left: 35%;
+    width: 25%;
+    height: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    font-size: 26px;
+}
+
+.gameResult, .gameDetails, .endResult {
+    font-size: 26px;
+    text-align: center;
+}
+
+.gameDetails, .endResult {
+    margin-top: 10px;
+}
