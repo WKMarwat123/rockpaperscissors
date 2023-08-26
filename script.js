@@ -7,80 +7,88 @@ function getComputerChoice() {
     return choices[index];
 }
 
-function getPlayerChoice() {
-    let choice = prompt("Enter your choice: ").toLowerCase();
-    if (choices.includes(choice)) {
-        return choice;
-    } else {
-        return getPlayerChoice();
-    }
-}
-
 function playRound(playerChoice, computerChoice) {
     if (playerChoice == computerChoice) {
-        console.log(`Draw. ${playerChoice} cannot beat ${computerChoice}`);
+        gameResultDiv.innerHTML = `Draw. ${playerChoice} cannot beat ${computerChoice}`;
         return 0;
     }
     if (playerChoice == "rock") {
         if (computerChoice == "scissors") {
-            console.log("You win. Rock beats Scissors");
+            gameResultDiv.innerHTML = "You win. Rock beats Scissors";
             return 1;
         }
         if (computerChoice == "paper") {
-            console.log("You lose. Paper beats Rock")
+            gameResultDiv.innerHTML = "You lose. Paper beats Rock"
             return -1;
         }
     }
     if (playerChoice == "paper") {
         if (computerChoice == "scissors") {
-            console.log("You lose. Scissors beat Paper")
+            gameResultDiv.innerHTML = "You lose. Scissors beat Paper"
             return -1;
         }
         if (computerChoice == "rock") {
-            console.log("You win. Paper beats Rock")
+            gameResultDiv.innerHTML = "You win. Paper beats Rock"
             return 1;
         }
     }
     if (playerChoice == "scissors") {
         if (computerChoice == "paper") {
-            console.log("You win. Scissors beats Paper")
+            gameResultDiv.innerHTML = "You win. Scissors beats Paper"
             return 1;
         }
         if (computerChoice == "rock") {
-            console.log("You lose. Rock beats Scissors")
+            gameResultDiv.innerHTML = "You lose. Rock beats Scissors"
             return -1;
         }
     }
 }
 
-function game() {
-    let playerPoints = 0;
-    let computerPoints = 0;
-    for(let i=0; i<5 ; i++) {
-        playerChoice = getPlayerChoice();
-        computerChoice = getComputerChoice();
-        result = playRound(playerChoice, computerChoice);
-        if(result == 1) {
-            playerPoints++;
-        } else if(result == -1) {
-            computerPoints++;
-        } else {
-            continue;
-        }
+function game(playerSelection, computerSelection) {
+    if (playerScore == 5 || computerScore == 5) {
+        let divs = document.querySelectorAll('.results');
+        divs = Array.from(divs);
+        divs.map(div => {
+            div.innerText = "";
+        });
+
+        playerScore = 0;
+        computerScore = 0;
     }
-    console.log(`Player Points: ${playerPoints}`);
-    console.log(`Computer Points: ${computerPoints}`);
-    winner(playerPoints, computerPoints)
+
+    let result = playRound(playerSelection, computerSelection);
+        if(result == 1) {
+            playerScore++;
+        }
+        if(result == -1) {
+            computerScore++;
+        }
+
+        roundResultDiv.innerHTML = `Player Score: ${playerScore}\nComputer Points: ${computerScore}`;
+
+        if (playerScore == 5 || computerScore == 5) {
+            endResultDiv.innerHTML = winner(playerScore, computerScore)
+        }
 }
 
 function winner(player, computer) {
     if(player > computer) {
-        console.log("You Win!")
-    } else if(player < computer) {
-        console.log("Computer Wins!")
+        return "Player Wins!";
     } else {
-        console.log("Draw.")
+        return "Computer Wins!";
     }
 }
 
-game()
+let playerScore = 0;
+let computerScore = 0;
+
+let gameResultDiv = document.querySelector(".gameResult");
+let roundResultDiv = document.querySelector(".gameDetails");
+let endResultDiv = document.querySelector(".endResult");
+
+
+let buttons = document.querySelectorAll("button");
+buttons = Array.from(buttons);
+    buttons.forEach(button => button.addEventListener("click", e => {
+        game(e.target.className, getComputerChoice());
+    }));
